@@ -24,47 +24,28 @@ document.getElementById("WebGL-div").appendChild(webGLRenderer.domElement);
 
 let system1;
 let system2;
+let size = 10;
+let transparent = true;
+let opacity = 0.6;
+let color = 0x55ffff;
+let sizeAttenuation = true;
 
+let redraw = function(){
+    const toRemove = [];
+    scene.children.forEach(function(child){
+        if (child instanceof THREE.Points){
+            toRemove.push(child);
+        }
+    });
 
-const controls = new function(){
-    this.size = 10;
-    this.transparent = true;
-    this.opacity = 0.6;
-    this.color = 0x55ffff;
+    toRemove.forEach(function(child){
+        scene.remove(child)
+    });
 
-    this.sizeAttenuation = true;
-
-    this.redraw = function(){
-        const toRemove = [];
-        scene.children.forEach(function(child){
-            if (child instanceof THREE.Points){
-                toRemove.push(child);
-            }
-        });
-
-        toRemove.forEach(function(child){
-            scene.remove(child)
-        });
-
-        createMultiPoints(
-            controls.size,
-            controls.transparent,
-            controls.opacity,
-            controls.sizeAttenuation,
-            controls.color );
-    };
+    createMultiPoints(size, transparent, opacity, sizeAttenuation, color);
 };
 
-
-const gui = new dat.GUI();
-gui.add(controls, 'size', 0, 20).onChange(controls.redraw);
-gui.add(controls, 'transparent').onChange(controls.redraw);
-gui.add(controls, 'opacity', 0, 1).onChange(controls.redraw);
-gui.addColor(controls, 'color').onChange(controls.redraw);
-gui.add(controls, 'sizeAttenuation').onChange(controls.redraw);
-
-controls.redraw();
-
+redraw();
 render();
 
 
